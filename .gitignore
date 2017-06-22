@@ -1,0 +1,16 @@
+/ActorServer/.vs
+/ActorServer/LibActor/*
+/CPP/Debug
+/CPP/CPP/Debug
+/CPP/Net/Debug
+/Parser/.vs
+/Parser/ParserTool/bin
+/Parser/ParserTool/obj
+/SdpCSharp/.vs
+/SdpCSharp/Net/bin
+/SdpCSharp/Net/obj
+/SdpCSharp/RealTimeRank/obj
+/SdpCSharp/RealTimeRank/bin
+/SdpCSharp/SdpCSharp/obj
+/SdpCSharp/SdpCSharp/bin
+/CPP/.vs
