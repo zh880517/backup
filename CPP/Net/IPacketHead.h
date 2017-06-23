@@ -1,16 +1,13 @@
 #pragma once
 #include <string>
-/*
-class IPacketHead
+
+struct IPacketHead
 {
-public:
-	virtual ~IPacketHead() {}
-
-	virtual int GetHeadLen() = 0;
-	virtual int 
+	virtual size_t HeadLen() = 0;
+	virtual size_t GetDataLen(const char* pHead, size_t iHeadLen) = 0;
 };
-*/
 
+/*
 class BufferRead
 {
 public:
@@ -221,6 +218,7 @@ private:
 
 
 class ServerPacketHead
+
 {
 public:
 	ServerPacketHead() = default;
@@ -262,3 +260,5 @@ private:
 	uint16_t m_iDestId = 0;
 	uint32_t m_iDataLen = 0;
 };
+
+*/

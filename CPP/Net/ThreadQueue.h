@@ -3,7 +3,7 @@
 #include <queue>
 #include <mutex>
 
-template<T>
+template<class T>
 class ThreadQueue
 {
 public:
@@ -27,6 +27,7 @@ public:
 		if (m_Queue.empty())
 			return false;
 		value = m_Queue.front();
+		return true;
 	}
 
 	void Pop()
@@ -42,3 +43,4 @@ private:
 	std::queue<T> m_Queue;
 	std::mutex m_Mutex;
 };
+

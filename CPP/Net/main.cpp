@@ -4,7 +4,6 @@
 #include <experimental/__net_ts/ts/timer.hpp>
 #include <experimental/__net_ts/ts/net.hpp>
 
-#include "PacketHead.h"
 #include <tuple>
 
 using namespace std::experimental::net;
@@ -63,6 +62,8 @@ union MyUnion
 
 int main()
 {
+	std::string str = "123456";
+	char* data = &(str.at(0));
 	ip::address addr = ip::make_address("0.0.0.0");
 	io_context c;
 	ip::tcp::socket so(c);

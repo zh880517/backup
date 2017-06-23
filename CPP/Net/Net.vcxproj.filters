@@ -24,17 +24,17 @@
     <ClCompile Include="TCPSession.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="TCPConnectPool.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="IOContextPool.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="TCPServer.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Socket.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="NetPacket.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="PacketHead.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="NetInclude.h">
       <Filter>头文件</Filter>
     </ClInclude>
@@ -48,6 +48,18 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="ThreadQueue.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="TCPConnectPool.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="IOContextPool.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="IPacketHead.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="TCPServer.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

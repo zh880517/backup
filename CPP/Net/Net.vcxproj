@@ -147,17 +147,21 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="IOContextPool.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="TCPConnection.cpp" />
+    <ClCompile Include="TCPConnectPool.cpp" />
+    <ClCompile Include="TCPServer.cpp" />
     <ClCompile Include="TCPSession.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="IOContextPool.h" />
     <ClInclude Include="NetInclude.h" />
-    <ClInclude Include="NetPacket.h" />
-    <ClInclude Include="PacketHead.h" />
+    <ClInclude Include="IPacketHead.h" />
     <ClInclude Include="SharePtrDef.h" />
-    <ClInclude Include="Socket.h" />
     <ClInclude Include="TCPConnection.h" />
+    <ClInclude Include="TCPConnectPool.h" />
+    <ClInclude Include="TCPServer.h" />
     <ClInclude Include="TCPSession.h" />
     <ClInclude Include="ThreadQueue.h" />
   </ItemGroup>
