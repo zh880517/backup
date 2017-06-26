@@ -44,13 +44,7 @@ void TCPServer::DoAccept()
 		if (!error)
 		{
 			TCPConnectionPtr pConnect = std::make_shared<TCPConnection>(this, peer, m_pHead->HeadLen());
-// 			std::cout << peer.remote_endpoint() << std::endl;
-// 			static std::string str = "Hello!!!";
-// 			peer.async_send(Net::buffer(str, str.size()), [](const std::error_code& error, std::size_t bytes_transferred)
-// 			{
-// 				std::cout << error << std::endl;
-// 				std::cout << bytes_transferred << std::endl;
-// 			});
+			pConnect->TryRecive();
 		}
 		else
 		{

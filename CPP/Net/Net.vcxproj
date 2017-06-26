@@ -149,6 +149,7 @@
   <ItemGroup>
     <ClCompile Include="IOContextPool.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="TCPClient.cpp" />
     <ClCompile Include="TCPConnection.cpp" />
     <ClCompile Include="TCPConnectPool.cpp" />
     <ClCompile Include="TCPServer.cpp" />
@@ -159,6 +160,7 @@
     <ClInclude Include="NetInclude.h" />
     <ClInclude Include="IPacketHead.h" />
     <ClInclude Include="SharePtrDef.h" />
+    <ClInclude Include="TCPClient.h" />
     <ClInclude Include="TCPConnection.h" />
     <ClInclude Include="TCPConnectPool.h" />
     <ClInclude Include="TCPServer.h" />

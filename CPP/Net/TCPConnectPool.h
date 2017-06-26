@@ -1,4 +1,5 @@
 #pragma once
+#include <functional>
 #include "SharePtrDef.h"
 #include "IPacketHead.h"
 
@@ -8,14 +9,13 @@ public:
 	TCPConnectPool(IOContext* pContext, IPacketHead* pHead);
 	~TCPConnectPool();
 
-
 public:
 
+	std::function<void(TCPConnectionPtr, std::string*)> OnRecivePacket;
+
+	std::function<void(TCPConnectionPtr pConnect, std::error_code ec)> OnConnectiontError;
+
 	virtual void Stop() = 0;
-
-	void OnConnectiontError(TCPConnection* pConnect, std::error_code ec);
-
-	void OnRecivePacket(TCPConnection* pConnect, std::string* pPacket);
 
 	size_t CalDateLen(const char* pHead, size_t len);
 

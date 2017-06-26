@@ -4,7 +4,14 @@ namespace Net = std::experimental::net;
 
 struct IOContext
 {
+public:
+	IOContext()
+		:workGurad(Net::make_work_guard(Context))
+	{
+	}
 	Net::io_context Context;
+private:
+	Net::executor_work_guard<Net::io_context::executor_type> workGurad;
 };
 
 struct Acceptor

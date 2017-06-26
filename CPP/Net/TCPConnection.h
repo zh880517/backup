@@ -22,6 +22,11 @@ public:
 
 	void TrySend();
 
+	void SetSession(TCPSession* pSession) { m_pSession = pSession; }
+
+	TCPSession* Session() { return m_pSession; }
+
+
 protected:
 
 	
@@ -34,6 +39,8 @@ protected:
 private:
 	Net::ip::tcp::socket m_Socket;
 	TCPConnectPool*		 m_ConnPool;
+	TCPSession*			 m_pSession = nullptr;
+	
 
 	bool			m_bReading = false;
 

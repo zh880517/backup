@@ -28,7 +28,7 @@ void TCPConnection::TryRecive()
 void TCPConnection::Close()
 {
 	std::error_code ec;
-	m_Socket.shutdown(Net::socket_base::shutdown_both, ec);
+	m_Socket.close(ec);
 }
 
 void TCPConnection::SetPacketQueue(PacketQueue * queue)
@@ -51,21 +51,21 @@ void TCPConnection::ReadHead()
 	m_Socket.async_receive(Net::buffer(m_pBuffer + m_iReadBytes, m_iBufferLen - m_iReadBytes), [this, self](std::error_code er, size_t bytes_transferred) 
 	{
 		if (er)
+			m_ConnPool->OnConnectiontError(self, er);
+
+		m_iReadBytes += bytes_transferred;
+		if (m_iReadBytes < m_iBufferLen)
 		{
-			m_iReadBytes += bytes_transferred;
-			if (m_iReadBytes < m_iBufferLen)
-			{
-				ReadHead();
-				return;
-			}
+			ReadHead();
+		}
+		else
+		{
 			size_t len = m_ConnPool->CalDateLen(m_pBuffer, m_iBufferLen);
 			m_pCurRecivePacket = new std::string(len + m_iBufferLen, (char)0);
 			m_pCurRecivePacket->append(m_pBuffer, m_iBufferLen);
 			m_pCurRecivePacket->resize(len + m_iBufferLen);
-
-			return;
 		}
-		m_ConnPool->OnConnectiontError(this, er);
+
 	});
 }
 
@@ -75,21 +75,21 @@ void TCPConnection::ReadBody()
 	m_Socket.async_receive(Net::buffer(&(m_pCurRecivePacket->at(0)) + m_iReadBytes, m_pCurRecivePacket->size() - m_iReadBytes), [this, self](std::error_code er, size_t bytes_transferred)
 	{
 		if (er)
+			m_ConnPool->OnConnectiontError(self, er);
+
+		m_iReadBytes += bytes_transferred;
+		if (m_iReadBytes < m_pCurRecivePacket->size())
 		{
-			m_iReadBytes += bytes_transferred;
-			if (m_iReadBytes < m_pCurRecivePacket->size())
-			{
-				ReadBody();
-				return;
-			}
+			ReadBody();
+		}
+		else
+		{
 			m_iReadBytes = 0;
-			m_ConnPool->OnRecivePacket(this, m_pCurRecivePacket);
+			m_ConnPool->OnRecivePacket(self, m_pCurRecivePacket);
 			m_pCurRecivePacket = nullptr;
 			ReadHead();
-			return;
 		}
-		m_ConnPool->OnConnectiontError(this, er);
-	});
+});
 }
 
 void TCPConnection::Send()
@@ -98,8 +98,8 @@ void TCPConnection::Send()
 	m_Socket.async_send(Net::buffer(m_pCurSendPacket->data() + m_iWriteBytes, m_pCurSendPacket->size() - m_iWriteBytes),
 		[this, self](std::error_code er, size_t bytes_transferred) 
 	{
-		if (!er)
-			m_ConnPool->OnConnectiontError(this, er);
+		if (er)
+			m_ConnPool->OnConnectiontError(self, er);
 		std::lock_guard<std::mutex> lock(m_SendMutex);
 		m_iWriteBytes += bytes_transferred;
 		do 
