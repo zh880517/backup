@@ -51,8 +51,6 @@ int main()
 	std::array<int, 9> a = { 57, 72, 28, 96, 33, 24, 68, 59, 59 };
 	std::sort(a.begin(), a.end());
 	//Qsort(a, 0, 8);/*这里原文第三个参数要减1否则内存越界*/
-	std::function
-	std::cout << "All : ";
 	for (int i = 0; i < sizeof(a) / sizeof(a[0]); i++)
 	{
 		std::cout << a[i] << " ";

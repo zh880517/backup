@@ -1,10 +1,8 @@
 #include "IOContextPool.h"
 #include "NetInclude.h"
-
+#include <iostream>
 
 IOContextPool::IOContextPool(size_t num)
-	: m_Pool(num)
-	, m_Threads(num)
 {
 	for (size_t i=0; i<num; ++i)
 	{
@@ -39,8 +37,9 @@ void IOContextPool::Run()
 					pContext->Context.run();
 					break;
 				}
-				catch (std::exception& /*e*/)
+				catch (std::exception& e)
 				{
+					std::cout << e.what() << std::endl;
 				}
 				catch (...)
 				{

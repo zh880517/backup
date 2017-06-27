@@ -16,7 +16,7 @@ public:
 
 	bool IsConnection();
 
-	void SetConnection(TCPConnectionPtr& pConn);
+	void SetConnection(const TCPConnectionPtr& pConn);
 
 	void SendPacket(const NetPacket& packet);
 

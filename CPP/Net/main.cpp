@@ -1,18 +1,20 @@
 #include <iostream>
-#include <experimental/timer>
-#include <experimental/net>
-#include <experimental/__net_ts/ts/timer.hpp>
-#include <experimental/__net_ts/ts/net.hpp>
+// #include <experimental/timer>
+// #include <experimental/net>
+// #include <experimental/__net_ts/ts/timer.hpp>
+// #include <experimental/__net_ts/ts/net.hpp>
 
 #include <tuple>
+#include "NetTest.h"
+#include "IOContextPool.h"
 
+/*
 using namespace std::experimental::net;
 
 void Handler_Timer(std::error_code ec)
 {
 	std::cout << ec << std::endl;
 }
-
 class Server
 {
 public:
@@ -53,7 +55,7 @@ private:
 private:
 	ip::tcp::acceptor m_Acceptor;
 };
-
+*/
 union MyUnion
 {
 	uint64_t value;
@@ -62,6 +64,7 @@ union MyUnion
 
 int main()
 {
+	/*
 	std::string str = "123456";
 	char* data = &(str.at(0));
 	ip::address addr = ip::make_address("0.0.0.0");
@@ -73,5 +76,19 @@ int main()
 	//t.async_wait(Handler_Timer);
 	Server sr(c, 2048);
 	c.run();
+	*/
+
+	IOContextPool pool(2);
+	{
+		ServerTest server;
+		pool.Run();
+		//ClientTest client(pool.GetIOContext());
+
+		system("pause");
+
+	}
+	
+	pool.Stop();
+
 	return 0;
 }

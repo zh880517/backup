@@ -26,13 +26,13 @@ bool TCPSession::IsConnection()
 	return (bool)m_pConnection;
 }
 
-void TCPSession::SetConnection(TCPConnectionPtr& pConn)
+void TCPSession::SetConnection(const TCPConnectionPtr& pConn)
 {
 	std::lock_guard<std::mutex> lock(m_Mutex);
 	m_pConnection = pConn;
 	if (m_pConnection)
 	{
-		pConn->SetSession(this);
+		m_pConnection->SetSession(this);
 		m_pConnection->TryRecive();
 		m_pConnection->SetPacketQueue(&m_PacketQueue);
 		m_pConnection->TrySend();

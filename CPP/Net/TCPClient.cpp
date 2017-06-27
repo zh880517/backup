@@ -2,9 +2,11 @@
 #include "NetInclude.h"
 #include "TCPSession.h"
 #include "TCPConnection.h"
+#include <iostream>
 
 TCPClient::TCPClient(IOContext* pContext, IPacketHead* pHead)
-	: TCPConnectPool(pContext, pHead)
+	: TCPConnectPool(pHead)
+	, m_pContext(pContext)
 {
 }
 
@@ -20,13 +22,23 @@ void TCPClient::Stop()
 void TCPClient::Connect(const std::string & strIP, uint16_t iPort, TCPSession * pSession)
 {
 	Net::ip::tcp::endpoint ep(Net::ip::make_address(strIP), iPort);
-	Net::ip::tcp::socket newSocket(m_pContext->Context);
-	TCPConnectionPtr pConnect = std::make_shared<TCPConnection>(this, newSocket, m_pHead->HeadLen());
+	TCPConnectionPtr pConnect = std::make_shared<TCPConnection>(this, Net::ip::tcp::socket(m_pContext->Context), m_pHead->HeadLen());
 	pConnect->SetSession(pSession);
-	newSocket.async_connect(ep, [this, &pConnect, pSession](const std::error_code& error) 
+	pConnect->Socket().async_connect(ep, [this, pConnect](const std::error_code& error) 
 	{
 		if (error)
+		{
 			OnConnectiontError(pConnect, error);
-		pSession->SetConnection(pConnect);
+			return;
+		}
+		auto pSess = pConnect->Session();
+		if (pSess != nullptr)
+		{
+			pSess->SetConnection(pConnect);
+			if (OnConnected)
+			{
+				OnConnected(pSess);
+			}
+		}
 	});
 }

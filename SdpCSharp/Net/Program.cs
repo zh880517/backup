@@ -16,21 +16,25 @@ namespace Net
         static void Main(string[] args)
         {
             Test.SeverTest server = new Test.SeverTest();
+            
             Test.ClientTest client = new Test.ClientTest();
             for (int j=0; j<3; ++j)
             {
-                server.Start();
+                //server.Start();
                 for (int i = 0; i < 10; ++i)
                 {
                     client.Start();
                     client.Stop();
                     Console.WriteLine("One turn end!");
                 }
-                server.Stop();
-                Console.WriteLine("server.Stop!");
+                //server.Stop();
+                //Console.WriteLine("server.Stop!");
             }
             Console.WriteLine("end!!!");
+            
+            //server.Start();
             Console.ReadKey();
+            //server.Stop();
         }
     }
 }

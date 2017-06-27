@@ -16,7 +16,7 @@ namespace Net.Test
     public class ClientTest
     {
         TCPClient client = new TCPClient(1024);
-        const int MaxNum = 100;
+        const int MaxNum = 10000;
         List<TCPSession> Sessions = new List<TCPSession>(MaxNum);
         int times = 0;
 
@@ -99,9 +99,9 @@ namespace Net.Test
                 session.DisConnect();
                 return;
             }
-            StringNetPacket pack = new StringNetPacket(StringNetPacket.TestStr);
+            StringNetPacket pongPacket = new StringNetPacket(1024);
             infor.SendNum++;
-            session.SendPacket(pack);
+            session.SendPacket(pongPacket);
         }
 
         private void OnClose(object sender, TCPSocketToken token)

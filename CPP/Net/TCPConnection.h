@@ -22,11 +22,11 @@ public:
 
 	void TrySend();
 
-	void SetSession(TCPSession* pSession) { m_pSession = pSession; }
+	void SetSession(TCPSession* pSession);
 
 	TCPSession* Session() { return m_pSession; }
 
-
+	Net::ip::tcp::socket& Socket() { return m_Socket; }
 protected:
 
 	

@@ -82,7 +82,7 @@ namespace Net.Test
             listener.Stop();
         }
 
-        private void OnRecive(TCPSocketToken token, RecivePacket pack)
+        private void OnRecive(TCPSocketToken token, RecivePacket packet)
         {
             TCPSession sendList = clients.GetOrAdd(token, (TCPSocketToken tk) => 
             {
@@ -90,13 +90,20 @@ namespace Net.Test
                 session.SetToken(tk);
                 return session;
             });
-            
+            /*
             string str = Encoding.Default.GetString(pack.Buffer, pack.HeadLen, pack.Length - pack.HeadLen);
             if (str != StringNetPacket.TestStr)
             {
                 Console.WriteLine("server recive error !");
             }
-            
+            */
+            for (int i = 0; i < packet.Length - packet.HeadLen; ++i)
+            {
+                if (packet.Buffer[packet.HeadLen + i] != (byte)i)
+                {
+                    Console.WriteLine("!!!");
+                }
+            }
             StringNetPacket pongPacket = new StringNetPacket(1024);
             token.Session.SendPacket(pongPacket);
         }
