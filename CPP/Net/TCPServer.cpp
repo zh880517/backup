@@ -4,12 +4,11 @@
 #include <iostream>
 
 
-TCPServer::TCPServer(IPacketHead* pHead, uint16_t iPort, uint32_t iThreadNum)
-	: TCPConnectPool(pHead)
+TCPServer::TCPServer(IOContext* pContext, IPacketHead* pHead, uint16_t iPort)
+	: TCPConnectPool(pContext, pHead)
 	, m_iPort(iPort)
-	, m_iThreadNum(iThreadNum)
 {
-	m_pContext = new IOContext;
+
 }
 
 
@@ -27,29 +26,6 @@ void TCPServer::Start()
 	m_pAcceptor = new Acceptor(m_pContext->Context, m_iPort);
 	Net::ip::tcp::acceptor::keep_alive option(true);
 	m_pAcceptor->acceptor.set_option(option);
-	for (uint32_t i=0; i<m_iThreadNum; ++i)
-	{
-		std::thread* pThread = new std::thread([this](IOContext* pCon) 
-		{
-			while (true)
-			{
-				try
-				{
-					pCon->Context.run();
-					break;
-				}
-				catch (std::exception& e)
-				{
-					std::cout << e.what() << std::endl;
-				}
-				catch (...)
-				{
-
-				}
-			}
-		}, m_pContext);
-		m_Threads.push_back(pThread);
-	}
 	DoAccept();
 }
 
@@ -60,11 +36,6 @@ void TCPServer::Stop()
 		m_pAcceptor->acceptor.close();
 		delete m_pAcceptor;
 		m_pAcceptor = nullptr;
-		for (auto pThread : m_Threads)
-		{
-			pThread->join();
-			delete pThread;
-		}
 	}
 }
 

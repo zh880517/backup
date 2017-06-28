@@ -6,7 +6,7 @@
 class TCPConnectPool
 {
 public:
-	TCPConnectPool(IPacketHead* pHead);
+	TCPConnectPool(IOContext* pContext, IPacketHead* pHead);
 	~TCPConnectPool();
 
 public:
@@ -26,6 +26,7 @@ public:
 
 
 protected:
+	IOContext*  m_pContext;
 	IPacketHead* m_pHead;
 	std::mutex m_Mutex;
 };

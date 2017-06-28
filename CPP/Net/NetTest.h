@@ -18,7 +18,7 @@ public:
 class ServerTest
 {
 public:
-	ServerTest();
+	ServerTest(IOContext* pContex);
 	~ServerTest() = default;
 
 protected:
@@ -55,6 +55,7 @@ private:
 	TCPClient m_Client;
 	ShortHead m_Head;
 	NetPacket m_SendPacket;
+	std::mutex m_Mutex;
 	std::map<TCPSession*, ClientRecord> m_Sessions;
 	const static uint32_t MaxClient = 10000;
 };

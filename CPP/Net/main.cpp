@@ -78,16 +78,15 @@ int main()
 	c.run();
 	*/
 
-	IOContextPool pool(2);
+	IOContextPool pool(8);
 	{
-		ServerTest server;
 		pool.Run();
-		//ClientTest client(pool.GetIOContext());
+		ServerTest server(pool.GetIOContext());
+		ClientTest client(pool.GetIOContext());
 
 		system("pause");
 
 	}
-	
 	pool.Stop();
 
 	return 0;

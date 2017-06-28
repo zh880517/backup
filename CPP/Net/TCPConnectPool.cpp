@@ -2,8 +2,9 @@
 #include "NetInclude.h"
 
 
-TCPConnectPool::TCPConnectPool(IPacketHead* pHead)
-	: m_pHead(pHead)
+TCPConnectPool::TCPConnectPool(IOContext* pContext, IPacketHead* pHead)
+	: m_pContext(pContext)
+	, m_pHead(pHead)
 {
 
 }

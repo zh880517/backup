@@ -5,8 +5,7 @@
 #include <iostream>
 
 TCPClient::TCPClient(IOContext* pContext, IPacketHead* pHead)
-	: TCPConnectPool(pHead)
-	, m_pContext(pContext)
+	: TCPConnectPool(pContext, pHead)
 {
 }
 

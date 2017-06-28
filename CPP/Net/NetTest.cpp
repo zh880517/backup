@@ -14,8 +14,8 @@ size_t ShortHead::GetDataLen(const char * pHead, size_t iHeadLen)
 	return iLen;
 }
 
-ServerTest::ServerTest()
-	:m_Server(&m_Head, 12345, 8)
+ServerTest::ServerTest(IOContext* pContex)
+	:m_Server(pContex, &m_Head, 12345)
 {
 	m_Server.OnRecivePacket = std::bind(&ServerTest::OnRecive, this, std::placeholders::_1, std::placeholders::_2);
 	m_Server.OnConnectiontError = std::bind(&ServerTest::OnError, this, std::placeholders::_1, std::placeholders::_2);
@@ -79,9 +79,13 @@ ClientTest::ClientTest(IOContext * pContex)
 		m_Client.Connect("127.0.0.1", 12345, pSession);
 		ClientRecord record;
 		record.Index = i;
-		m_Sessions.insert(std::make_pair(pSession, record));
+		{
+			std::lock_guard<std::mutex> lock(m_Mutex);
+			m_Sessions.insert(std::make_pair(pSession, record));
+		}
 		std::this_thread::sleep_for(std::chrono::microseconds(10));
 	}
+	std::cout << "End" << std::endl;
 }
 
 ClientTest::~ClientTest()
@@ -103,6 +107,7 @@ void ClientTest::OnRecive(TCPConnectionPtr pConn, std::string * pPacket)
 		std::cout << "Error !!!" << std::endl;
 		return;
 	}
+	std::lock_guard<std::mutex> lock(m_Mutex);
 	auto it = m_Sessions.find(pSession);
 	if (it != m_Sessions.end())
 	{
@@ -131,8 +136,9 @@ void ClientTest::OnError(TCPConnectionPtr pConnect, std::error_code ec)
 	if (pSession == nullptr)
 		return;
 	
+	std::lock_guard<std::mutex> lock(m_Mutex);
 	auto it = m_Sessions.find(pSession);
-	if (it != m_Sessions.end() /*&& it->second.SendNum < 103*/)
+	if (it != m_Sessions.end() && it->second.SendNum < 103)
 	{
 		std:: cout << "Close Client : Send Num = " << it->second.SendNum << " Index = "<< it->second.Index << ec << std::endl;
 	}

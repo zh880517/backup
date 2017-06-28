@@ -5,7 +5,7 @@
 class IOContextPool
 {
 public:
-	IOContextPool(size_t num);
+	IOContextPool(uint32_t iThreadNum);
 	~IOContextPool();
 
 
@@ -17,8 +17,8 @@ public:
 
 private:
 
-	std::vector<IOContext*> m_Pool;
+	IOContext*				m_pContext;
+	uint32_t				m_iThreadNum;
 	std::vector<std::thread*> m_Threads;
-	size_t m_iCurContextIndex = 0;
 };
 

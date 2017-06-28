@@ -13,8 +13,6 @@ public:
 	void Connect(const std::string& strIP, uint16_t iPort, TCPSession* pSession);
 
 	std::function<void(TCPSession*)> OnConnected;
-private:
 
-	IOContext*	m_pContext;
 };
 
