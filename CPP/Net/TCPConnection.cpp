@@ -1,7 +1,7 @@
 #include "TCPConnection.h"
 #include "TCPConnectPool.h"
 
-TCPConnection::TCPConnection(TCPConnectPool* connPool, Net::ip::tcp::socket& socket, uint32_t buffLen)
+TCPConnection::TCPConnection(TCPConnectPool* connPool, Net::ip::tcp::socket& socket, size_t buffLen)
 	: m_Socket(std::move(socket))
 	, m_ConnPool(connPool)
 	, m_iBufferLen(buffLen)

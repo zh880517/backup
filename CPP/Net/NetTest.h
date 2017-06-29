@@ -57,7 +57,7 @@ private:
 	NetPacket m_SendPacket;
 	std::mutex m_Mutex;
 	std::map<TCPSession*, ClientRecord> m_Sessions;
-	const static uint32_t MaxClient = 10000;
+	const static uint32_t MaxClient = 20000;
 };
 
 

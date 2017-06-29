@@ -78,7 +78,7 @@ ClientTest::ClientTest(IOContext * pContex)
 		TCPSession* pSession = new TCPSession;
 		m_Client.Connect("127.0.0.1", 12345, pSession);
 		ClientRecord record;
-		record.Index = i;
+		record.Index = (uint32_t)i;
 		{
 			std::lock_guard<std::mutex> lock(m_Mutex);
 			m_Sessions.insert(std::make_pair(pSession, record));

@@ -78,7 +78,7 @@ int main()
 	c.run();
 	*/
 
-	IOContextPool pool(8);
+	IOContextPool pool(4);
 	{
 		pool.Run();
 		ServerTest server(pool.GetIOContext());

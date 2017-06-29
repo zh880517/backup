@@ -9,7 +9,7 @@
 class TCPConnection : public std::enable_shared_from_this<TCPConnection>
 {
 public:
-	TCPConnection(TCPConnectPool* connPool, Net::ip::tcp::socket& socket, uint32_t buffLen);
+	TCPConnection(TCPConnectPool* connPool, Net::ip::tcp::socket& socket, size_t buffLen);
 	~TCPConnection();
 
 public: 
