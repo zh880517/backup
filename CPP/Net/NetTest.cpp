@@ -48,7 +48,7 @@ void ServerTest::OnError(TCPConnectionPtr pConnect, std::error_code ec)
 {
 	if (ec.value() != 10009)
 	{
-		std::cout << ec << std::endl;
+		//std::cout << ec << std::endl;
 	}
 	TCPSession* pSession = pConnect->Session();
 	pConnect->SetSession(nullptr);
@@ -83,9 +83,13 @@ ClientTest::ClientTest(IOContext * pContex)
 			std::lock_guard<std::mutex> lock(m_Mutex);
 			m_Sessions.insert(std::make_pair(pSession, record));
 		}
-		std::this_thread::sleep_for(std::chrono::microseconds(10));
 	}
 	std::cout << "End" << std::endl;
+	std::this_thread::sleep_for(std::chrono::microseconds(100));
+	for (auto& kv : m_Sessions)
+	{
+		kv.first->SendPacket(m_SendPacket);
+	}
 }
 
 ClientTest::~ClientTest()
@@ -94,8 +98,9 @@ ClientTest::~ClientTest()
 
 void ClientTest::OnConnected(TCPSession * pSession)
 {
-	pSession->SendPacket(m_SendPacket);
-	m_Sessions[pSession].SendNum++;
+	return;
+	//pSession->SendPacket(m_SendPacket);
+	//m_Sessions[pSession].SendNum++;
 }
 
 void ClientTest::OnRecive(TCPConnectionPtr pConn, std::string * pPacket)
@@ -138,9 +143,14 @@ void ClientTest::OnError(TCPConnectionPtr pConnect, std::error_code ec)
 	
 	std::lock_guard<std::mutex> lock(m_Mutex);
 	auto it = m_Sessions.find(pSession);
-	if (it != m_Sessions.end() && it->second.SendNum < 103)
+	if (it != m_Sessions.end() && it->second.SendNum < 102)
 	{
 		std:: cout << "Close Client : Send Num = " << it->second.SendNum << " Index = "<< it->second.Index << ec << std::endl;
+	}
+	static uint32_t num = 0;
+	if (++num >= MaxClient)
+	{
+		std::cout << "All End" << std::endl;
 	}
 	pConnect->SetSession(nullptr);
 	delete pSession;
