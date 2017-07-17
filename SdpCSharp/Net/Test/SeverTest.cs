@@ -5,6 +5,20 @@ using System.Collections.Concurrent;
 
 namespace Net.Test
 {
+    public class ShortHead : IPacketHead
+    {
+        public int HeadLen
+        {
+            get{ return 2; }
+        }
+
+        public int CalDateLen(byte[] buffer)
+        {
+            return buffer[0] | buffer[1] << 8;
+        }
+    }
+
+
     public class StringNetPacket : INetPacket
     {
         public static readonly string TestStr = "所谓窥镜，乃促人反省之语。然则真能反省者，几人耳。人居镜前，自恃之，自负之，遂不得省。镜非醒悟之器，乃迷惑之器。初见不悟，而再见、三见，渐至迷途。";
@@ -12,16 +26,19 @@ namespace Net.Test
         
         public StringNetPacket(string val)
         {
-            Buffer = Encoding.Default.GetBytes(val);
+            byte[] buffer = Encoding.Default.GetBytes(val);
+            Buffer = new byte[buffer.Length + 2];
+            WriteLength(buffer.Length);
         }
 
         public StringNetPacket(int len)
         {
-            Buffer = new byte[len];
-            for (int i=0; i<len; ++i)
+            Buffer = new byte[len + 2];
+            for (int i=2; i<len+2; ++i)
             {
-                Buffer[i] = (byte)i;
+                Buffer[i] = (byte)(i-2);
             }
+            WriteLength(len);
         }
 
         public bool HasHead
@@ -56,10 +73,16 @@ namespace Net.Test
             Array.Copy(Buffer, srcOffset, desBuffer, desOffset, iReadLen);
             return iReadLen;
         }
+
+        private void WriteLength(int len)
+        {
+            Buffer[0] = (byte)(len & 0xFF);
+            Buffer[1] = (byte)((len >> 8) & 0xFF);
+        }
     }
     public class SeverTest
     {
-        TCPListener listener = new TCPListener(12345, 10, 1024, 1024);
+        TCPListener listener = new TCPListener(new ShortHead(),12345, 10, 1024, 1024);
         Thread thread;
         AutoResetEvent mutex = new AutoResetEvent(false);
         private ConcurrentDictionary<TCPSocketToken, TCPSession> clients = new ConcurrentDictionary<TCPSocketToken, TCPSession>();

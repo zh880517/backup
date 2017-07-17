@@ -21,7 +21,7 @@ namespace Net
         protected ConcurrentQueue<INetPacket> SendList = null;
 
         //包头
-        protected NetPacketHead currPackHead = new NetPacketHead();
+        protected NetPacketHead currPackHead = null;
         protected ReadBuffer readBuffer = new ReadBuffer();
 
         //当前正在接受的包
@@ -49,6 +49,7 @@ namespace Net
         public TCPSocketToken(int sendBufferSize, int reciveBufferSize, TCPConnectPool conPool)
         {
             connnectPool = conPool;
+            currPackHead = new NetPacketHead(conPool.Packethead);
             byte[] sendBuffer = new byte[sendBufferSize];
             sendSAEA = new SocketAsyncEventArgs();
             sendSAEA.SetBuffer(sendBuffer, 0, sendBuffer.Length);
@@ -128,7 +129,7 @@ namespace Net
             }
         }
 
-        public bool OnReciveCompleted()
+        public void OnReciveCompleted()
         {
             readBuffer.Set(reciveSAEA.Buffer, reciveSAEA.Offset, reciveSAEA.BytesTransferred);
             while (!readBuffer.IsOver)
@@ -138,8 +139,7 @@ namespace Net
                     //读取包长度
                     if (!currPackHead.Write(readBuffer))
                         break;
-                    if ((uint)currPackHead.GetPackLen() > connnectPool.MaxPacketLen)
-                        return false;
+                    
                     recivePacket = new RecivePacket(currPackHead);
                     currPackHead.Reset();
                 }
@@ -162,7 +162,6 @@ namespace Net
                     }
                 }
             }
-            return true;
         }
         
         public void DoRecive()

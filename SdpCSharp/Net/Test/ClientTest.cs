@@ -15,8 +15,8 @@ namespace Net.Test
     }
     public class ClientTest
     {
-        TCPClient client = new TCPClient(1024);
-        const int MaxNum = 10000;
+        TCPClient client = new TCPClient(new ShortHead(), 1024);
+        const int MaxNum = 1000;
         List<TCPSession> Sessions = new List<TCPSession>(MaxNum);
         int times = 0;
 

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace Net
 {
+    /*
     public class NetPacketHead
     {
         private byte[] _Buffer = new byte[6];
@@ -60,6 +61,46 @@ namespace Net
                 }
             }
             
+            return IsOver;
+        }
+    }
+    */
+    public class NetPacketHead
+    {
+        private byte[] _Buffer = null;
+        private int _CurPos = 0;
+        private IPacketHead _Packethead = null;
+
+        public byte[] Buffer { get { return _Buffer; } }
+
+        public bool IsOver { get { return _CurPos == _Buffer.Length; } }
+
+        public int HeadLen { get { return _Buffer.Length; } }
+
+        public NetPacketHead(IPacketHead head)
+        {
+            _Packethead = head;
+            _Buffer = new byte[head.HeadLen];
+        }
+
+        public void Reset()
+        {
+            _CurPos = 0;
+        }
+
+        public int GetPackLen()
+        {
+            return _Packethead.CalDateLen(_Buffer);
+        }
+
+        public bool Write(ReadBuffer readBuffer)
+        {
+            int readLen = 0;
+            if (_CurPos < _Buffer.Length)
+            {
+                readLen = readBuffer.Read(_Buffer, _CurPos, _Buffer.Length - _CurPos);
+                _CurPos += readLen;
+            }
             return IsOver;
         }
     }

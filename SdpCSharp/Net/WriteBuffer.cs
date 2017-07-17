@@ -7,35 +7,42 @@ namespace Net
     {
         private INetPacket Packet;
         private int WritePos;
+        /*
         private byte[] HeadBuffer = new byte[6];
         private int HeadLenth;
         private int HeadWritePos;
-
+        */
         public void SetPacket(INetPacket packet)
         {
             if (Packet == packet)
                 return;
             Packet = packet;
             WritePos = 0;
+            /*
             HeadLenth = 0;
             HeadWritePos = 0;
             if (packet != null)
             {
                 WriteLength();
             }
+            */
         }
 
         public bool IsComplete()
         {
             if (Packet == null)
                 return true;
-            return HeadWritePos>= HeadLenth && (Packet.Length + Packet.Offset) <= WritePos;
+            return /*HeadWritePos>= HeadLenth && */(Packet.Length + Packet.Offset) <= WritePos;
         }
 
         public void Write(SocketAsyncEventArgs sendSAEA)
         {
             if (Packet == null)
                 return;
+            int len = Packet.Read(sendSAEA.Buffer, 0, WritePos, sendSAEA.Buffer.Length);
+            WritePos += len;
+            sendSAEA.SetBuffer(0, len);
+            /*
             int writeLen = 0;
             while (writeLen < sendSAEA.Buffer.Length)
             {
@@ -56,8 +63,10 @@ namespace Net
                     HeadWritePos += len;
                 }
             }
-            sendSAEA.SetBuffer(0, writeLen);
+            sendSAEA.SetBuffer(0, len);
+            */
         }
+        /*
         private void WriteLength()
         {
             if (!Packet.HasHead)
@@ -81,5 +90,6 @@ namespace Net
                 }
             }
         }
+        */
     }
 }

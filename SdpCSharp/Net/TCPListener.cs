@@ -10,8 +10,9 @@ namespace Net
         private IPEndPoint _LocalEndPoint;
         private SocketAsyncEventArgs _AcceptEvent;
         
-        public TCPListener(int port, int numConnections, int receiveBufferSize, int sendBufferSize, int allowedMaxPacketLen = -1)
+        public TCPListener(IPacketHead head, int port, int numConnections, int receiveBufferSize, int sendBufferSize, int allowedMaxPacketLen = -1)
         {
+            _PackHead = head;
             _TokenPool = new TCPSocketTokenPool(numConnections, sendBufferSize, receiveBufferSize, this);
 
             _LocalEndPoint = new IPEndPoint(IPAddress.Any, port);

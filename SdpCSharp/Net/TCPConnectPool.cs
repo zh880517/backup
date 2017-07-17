@@ -7,7 +7,7 @@ namespace Net
     public class TCPConnectPool
     {
         protected TCPSocketTokenPool _TokenPool;
-
+        protected IPacketHead _PackHead;
         private object CloseLockObj = new object();
         public event EventHandler<TCPSocketToken> OnCloseToken;
 
@@ -17,7 +17,7 @@ namespace Net
         public Action<TCPSocketToken, RecivePacket> OnRecive = (TCPSocketToken token, RecivePacket packet) => { };
         
         protected uint AllowedMaxPacketLen = 0xFFFFFFFF;
-
+        public IPacketHead Packethead { get { return _PackHead; } }
         public uint MaxPacketLen { get { return AllowedMaxPacketLen; } }
         public virtual void Stop()
         {
@@ -36,12 +36,7 @@ namespace Net
                 }
                 else if (e.LastOperation == SocketAsyncOperation.Receive && e.BytesTransferred > 0)
                 {
-                    if (!token.OnReciveCompleted())
-                    {
-                        LogHelper.LogError("Packet Length is bigger than AllowedMaxPacketLen!!");
-                        token.DisConnect();
-                        return;
-                    }
+                    token.OnReciveCompleted();
                     token.DoRecive();
                 }
                 else

@@ -10,8 +10,9 @@ namespace Net
         public Action<TCPSession, SocketError> OnConnectResult = (TCPSession token, SocketError e) => { LogHelper.LogInfor("ConnectResult " + e.ToString()); };
 
         private HashSet<TCPSocketToken> Tokens = new HashSet<TCPSocketToken>();
-        public TCPClient(int bufferSize)
+        public TCPClient(IPacketHead head, int bufferSize)
         {
+            _PackHead = head;
             _TokenPool = new TCPSocketTokenPool(1, bufferSize, bufferSize, this);
 
             OnCloseToken += new EventHandler<TCPSocketToken>((object sender, TCPSocketToken token) =>
