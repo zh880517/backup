@@ -94,6 +94,7 @@ namespace Parser
             {
                 byte[] data = new UTF8Encoding().GetBytes(strOut);
                 fs.Write(data, 0, data.Length);
+                fs.SetLength(data.Length);
                 fs.Flush();
                 fs.Close();
             }
